@@ -1,56 +1,87 @@
+#include <tuple>
 #include <vector>
 
 namespace CodexMachina
 {
-  auto modulo(const long long x, const long long modulus)
+  // Not mine
+  /*
+  int modInverse(int a, int m)
   {
-    return x - (modulus * (x / modulus));
+    int m0 = m;
+    int y = 0, x = 1;
+    if (m == 1) return 0;
+
+    while (a > 1)
+    {
+      // q is quotient 
+      int q = a / m;
+      int t = m;
+
+      // m is remainder now, process same as 
+      // Euclid's algo 
+      m = a % m, a = t;
+      t = y;
+
+      // Update y and x 
+      y = x - q * y;
+      x = t;
+    }
+
+    // Make x positive 
+    if (x < 0) x += m0;
+    return x;
   }
+  */
 
   auto gcd(const unsigned long long x, const unsigned long long y) -> unsigned long long
   {
-    if (y > x) return gcd(y, x);
-    if (y == 1) return 1;
     if (y == 0) return x;
-    return gcd(y, modulo(x, y));
+    return gcd(y, x % y);
   }
 
-  // m, x
-  auto inverse(const long long x, const unsigned long long modulus) -> unsigned long long
+  // Not mine
+  /*
+  auto extended_gcd(int a, int b) -> std::tuple<int, int, int>
   {
-    std::vector<long long> r;
-    r.push_back(modulus);
-    r.push_back(x);
-    std::vector<long long> a;
-    a.push_back(0);
-    a.push_back(1);
+    if (a == 0) return std::make_tuple(b, 0, 1);
+    int gcd, x, y;
+    std::tie(gcd, x, y) = extended_gcd(b % a, a);
+    return std::make_tuple(gcd, (y - (b / a) * x), x);
+  }
+  */
 
-    while (r[r.size() - 1] != 0)
+  auto inverse(const long long x, const long long modulus) -> unsigned long long
+  {
+    auto r2 = modulus;
+    auto r1 = x;
+    std::vector<long long> a;
+    auto a2 = 0LL;
+    auto a1 = 1LL;
+
+    while (r1 != 0)
     {
-      auto r1 = r[r.size() - 1];
-      auto r2 = r[r.size() - 2];
-      r.push_back(modulo(r2, r1));
       auto qn = (r2 / r1);
-      auto a1 = a[a.size() - 1];
-      auto a2 = a[a.size() - 2];
+      auto oldR2 = r2;
+      r2 = r1;
+      r1 = oldR2 % r1;
       auto subResult = a2 - (qn * a1);
-      auto modResult = modulo(subResult, modulus);
-      a.push_back(modResult);
+      a2 = a1;
+      a1 = subResult % modulus;
     }
 
-    if (r[r.size() - 2] != 1) return 0;
-    auto result = a[a.size() - 2];
+    if (r2 != 1) return 0;
+    auto result = a2;
     return (result < 0) ? modulus + result : result;
   }
 
-  auto primeTest(const unsigned long long x)
+  auto primeTest(const long long x)
   {
     if (x == 0) return false;
     if (x == 1) return false;
     if (x == 2) return true;
-    if (modulo(x, 2) == 0) return false;
+    if ((x % 2) == 0) return false;
 
-    for (unsigned long long i = 3; i <= (x / 2) + 1; i += 2)
+    for (long long i = 3; i <= (x / 2) + 1; i += 2)
     {
       if (gcd(x, i) > 1) return false;
     }
@@ -63,17 +94,17 @@ namespace CodexMachina
     return gcd(x, y) == 1;
   }
 
-  auto primeFactorization(const unsigned long long x)
+  auto primeFactorization(const long long x)
   {
     if ((x == 0) || (x == 1)) return std::vector<unsigned long long>{};
     auto result = std::vector<unsigned long long>{};
     auto curValue = x;
 
-    for (unsigned long long i = 2; (i <= (x / 2) + 1) && (curValue != 1); i += 2)
+    for (long long i = 2; (i <= (x / 2) + 1) && (curValue != 1); i += 2)
     {
       if (!primeTest(i)) continue;
 
-      while (modulo(curValue, i) == 0)
+      while ((curValue % i) == 0)
       {
         result.push_back(i);
         curValue /= i;
@@ -85,10 +116,10 @@ namespace CodexMachina
     return result;
   }
 
-  auto congruenceTest(long long x, long long y, const unsigned long long modulus)
+  auto congruenceTest(long long x, long long y, const long long modulus)
   {
     if (x < 0) x = 0 - x;
     if (y < 0) y = 0 - y;
-    return modulo((x + y), modulus) == 0;
+    return ((x + y) % modulus) == 0;
   }
 }
