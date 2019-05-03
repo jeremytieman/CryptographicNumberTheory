@@ -1,3 +1,4 @@
+#include <set>
 #include <tuple>
 #include <vector>
 
@@ -121,5 +122,38 @@ namespace CodexMachina
     if (x < 0) x = 0 - x;
     if (y < 0) y = 0 - y;
     return ((x + y) % modulus) == 0;
+  }
+
+  auto modularExponentiation(long long base, long long exponent, long long modulus)
+  {
+    auto modBase = base % modulus;
+    auto result = 1LL;
+
+    while (exponent > 0)
+    {
+      if ((exponent % 2) == 1)
+      {
+        result *= modBase;
+        result %= modulus;
+      }
+
+      exponent >>= 1;
+      modBase *= modBase;
+      modBase %= modulus;
+    }
+
+    return result;
+  }
+
+  auto totient(long long modulus)
+  {
+    auto result = std::set<long long>{};
+
+    for (auto i = 0LL; i < modulus; ++i)
+    {
+      if (gcd(i, modulus) == 1) result.insert(i);
+    }
+
+    return result;
   }
 }

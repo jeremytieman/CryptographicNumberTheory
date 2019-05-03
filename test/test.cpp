@@ -2,19 +2,19 @@
 
 #include "NumberTheory.hpp"
 
-void LessonFour();
-void IntegerFoundationPractice();
-void IntegerFoundationQuiz();
-
-void main()
+template<typename T>
+void printVector(std::vector<T> vec)
 {
-  LessonFour();
-  IntegerFoundationPractice();
-  IntegerFoundationQuiz();
-  return;
+  for (const auto v : vec) std::cout << v << " ";
 }
 
-void LessonFour()
+template<typename T>
+void printSet(std::set<T> s)
+{
+  for (const auto v : s) std::cout << v << " ";
+}
+
+void Week1LessonFour()
 {
   std::cout << "GCD of 2017 and 1024: " << CodexMachina::gcd(2017, 1024) << "\n";
   std::cout << "GCD of 1071 and 462: " << CodexMachina::gcd(1071, 462) << "\n";
@@ -38,7 +38,7 @@ void IntegerFoundationPractice()
   // Question 2:
   std::cout << "Prime factorization of 6469693230: ";
   auto pf = CodexMachina::primeFactorization(6469693230U);
-  for (auto f : pf) std::cout << f << " ";
+  printVector(pf);
   std::cout << "\n";
   std::cout << "\n";
 
@@ -94,4 +94,28 @@ void IntegerFoundationQuiz()
   std::cout << "Are 219 and 220 relatively prime: " << CodexMachina::relativelyPrimeTest(219, 220) << "\n";
   std::cout << "Inverse of 219 mod 220: " << CodexMachina::inverse(219, 220) << "\n";
   std::cout << "\n";
+}
+
+void Week2LessonOne()
+{
+  std::cout << "3 ^ 5 (mod 143): " << CodexMachina::modularExponentiation(3, 5, 143) << "\n";
+  std::cout << "12345 ^ 6789 (mod 143): " << CodexMachina::modularExponentiation(12345, 6789, 143) << "\n";
+  std::cout << "\n";
+}
+
+void Week2LessonTwo()
+{
+  std::cout << "Totient of 21: ";
+  auto totient = CodexMachina::totient(21);
+  printSet(totient);
+}
+
+void main()
+{
+  //Week1LessonFour();
+  //IntegerFoundationPractice();
+  //IntegerFoundationQuiz();
+  //Week2LessonOne();
+  Week2LessonTwo();
+  return;
 }
