@@ -1,3 +1,4 @@
+#include <numeric>
 #include <set>
 #include <tuple>
 #include <vector>
@@ -155,5 +156,71 @@ namespace CodexMachina
     }
 
     return result;
+  }
+
+  auto sieveOfEratosthenes(const long long n)
+  {
+    auto numbers = std::vector<long long>(n - 1);
+    std::iota(std::begin(numbers), std::end(numbers), 2);
+    auto prime = std::vector<bool>(n - 1, false);
+
+    for (auto i = 0; i < numbers.size(); ++i)
+    {
+      if (!prime[i]) continue;
+      const auto number = numbers[i];
+      const auto start = number * number;
+      if (start > n) break;
+      for (auto j = start; j <= n; j += number) prime[j] = false;
+    }
+
+    auto result = std::vector<long long>{};
+
+    for (auto i = 0; i < numbers.size(); ++i)
+    {
+      if (!prime[i]) continue;
+      result.push_back(numbers[i]);
+    }
+
+    return result;
+  }
+
+  auto fermatPrimalityTest(const long long n, size_t k)
+  {
+    for (size_t i = 0; i < k; ++i)
+    {
+      // Replace 6 with random value 1 < a < n - 2
+      auto a = 6;
+      auto val = a ^ (n - 1);
+      auto mod = val % n;
+      if (mod != 1) return false;
+    }
+
+    return true;
+  }
+
+  auto millerRabinPrimalityTest(const long long n)
+  {
+    // Replace 6 with random value 1 < a < n - 2
+    const auto a = 6;
+    auto d = n - 1;
+    auto s = 0;
+
+    while ((d % 2LL) == 0)
+    {
+      ++s;
+      d /= 2LL;
+    }
+
+    auto val = a ^ d;
+
+    for (int j = 0; j < s; ++j)
+    {
+      const auto mod = val % n;
+      if (mod == -1) return true;
+      if ((j == 0) && (mod == 1)) return true;
+      val *= val;
+    }
+
+    return false;
   }
 }

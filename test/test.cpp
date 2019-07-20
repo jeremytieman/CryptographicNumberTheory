@@ -110,12 +110,24 @@ void Week2LessonTwo()
   printSet(totient);
 }
 
+void Week3LessonOne()
+{
+  for (int i = 0; i < 900; ++i)
+  {
+    auto a = i % 25;
+    auto b = i % 9;
+    auto c = i % 4;
+    if ((a == 19) && (b == 7) && (c == 2)) std::cout << "Result: " << i << "\n";
+  }
+}
+
 void main()
 {
   //Week1LessonFour();
   //IntegerFoundationPractice();
   //IntegerFoundationQuiz();
   //Week2LessonOne();
-  Week2LessonTwo();
+  //Week2LessonTwo();
+  Week3LessonOne();
   return;
 }
